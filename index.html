@@ -48,6 +48,14 @@ class: center, middle
 
 Toby Cole, Technical Architect, Semantico
 
+(press 'p' to show notes &amp; demo guide)
+
+???
+
+To work along with the examples, [download solr](http://lucene.apache.org/solr/downloads.html) and run 'example/start.jar'.
+
+Solr should be running on [port 8983](http://localhost:8983)
+
 ---
 
 # What am I talking about?
@@ -56,7 +64,8 @@ Toby Cole, Technical Architect, Semantico
 * Tokenization, terms and term-filters.
 * Relevance - tf-idf algoithm
 * Solr's API
-* SolrJ
+* SolrJ - Java API
+* More Like This
 ---
 
 # What are Solr &amp; Lucene?
@@ -94,6 +103,11 @@ lowercasing:
 stemming:
 
 `an` `ascii` `represent` `of` `milei` `cyru` `twerk` `face` `p`
+
+???
+
+To try this for yourself have a look at the [*Analysis* section in Solr's admin](http://localhost:8983/solr/#/collection1/analysis?analysis.fieldvalue=An%20ASCII%20representation%20of%20Miley%20Cyrus%27%20twerking%20face%20%3BP&analysis.query=An%20ASCII%20representation%20of%20Miley%20Cyrus%27%20twerking%20face%20%3BP&analysis.fieldtype=text_en&verbose_output=0).
+
 
 ---
 
@@ -148,6 +162,14 @@ Over HTTP -
 
 more details - [Solr Update docs](http://wiki.apache.org/solr/UpdateXmlMessages)
 
+???
+
+To add the cheeses data to your solr, [download the data](cheeses.csv) and run this `curl` command:
+
+	curl http://localhost:8983/solr/update/csv --data-binary @cheeses.csv -H 'Content-type:text/plain; charset=utf-8'
+
+If you're running windows, you'll have to [install cygwin](http://www.cygwin.com/).
+
 ---
 # Solr's API - Output XML
 
@@ -161,6 +183,12 @@ Let's have a look
 * [Hams](http://localhost:8081/solr/select?q=*:*&wt=json)
 * [Cheeses](http://localhost:8082/solr/select?q=*:*&wt=json)
 
+
+???
+
+If you've loaded the data yourself, have a look at the [XML output](http://localhost:8983/solr/select?q=*:*) or the [JSON output](http://localhost:8983/solr/select?q=*:*&wt=json) locally.
+
+Have a play with the 'q' parameter, it's the search query. The syntax is defined in the [Lucene's javadoc](http://lucene.apache.org/core/4_4_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description) with modifications documented on the [Solr Wiki](http://wiki.apache.org/solr/SolrQuerySyntax)
 
 ---
 # SolrJ
@@ -184,6 +212,17 @@ public class Cheese {
 }
 ```
 
+???
+
+The SolrJ jar is included in the `dist` folder of the solr download.
+
+Alternatively you could use the maven artifact:
+
+	<dependency>
+		<groupId>org.apache.solr</groupId>
+		<artifactId>solr-solrj</artifactId>
+		<version>4.4.0</version>
+	</dependency>
 ---
 
 # SolrJ indexing
@@ -216,7 +255,12 @@ public class Cheese {
 * Searches index for documents with those terms
 * Optionally applies boosts (expensive)
 
-[Example - hopefully](http://cstsemscol01a.test.semantico.net:20101/select?q=bacon&fl=dc_title,dc_description&qt=mlt&mlt.fl=dc_description&mlt.interestingTerms=details&mlt.boost=true)
+
+???
+
+Couldn't get the MLT example working with the small cheeses dataset :(
+
+Checkout the [MLT docs instead](http://wiki.apache.org/solr/MoreLikeThis)
 
 ---
 class: center, middle
@@ -228,9 +272,12 @@ class: center, middle
 
 #Cheers!
 
-@tubfun
+[@tubfun](https://twitter.com/tubfun)
 
-@semantico
+[@semantico](https://twitter.com/semantico)
+
+Slides up on labs.semantico.com tomorrow
+(unless you're reading them tomorrow, in which case they're up now)
 
     </textarea>
     <script src="http://gnab.github.io/remark/downloads/remark-0.5.4.min.js" type="text/javascript">
@@ -239,7 +286,8 @@ class: center, middle
 
       var slideshow = remark.create({
           highlightStyle: 'monokai',
-          highlightLanguage: 'remark'
+          highlightLanguage: 'remark',
+	  ratio: '4:3'
         }) ;
 
     </script>
